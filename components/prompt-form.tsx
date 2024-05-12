@@ -5,8 +5,6 @@ import Textarea from 'react-textarea-autosize'
 
 import { useActions, useUIState } from 'ai/rsc'
 
-import { UserMessage } from './stocks/message'
-import { type AI } from '@/lib/chat/actions'
 import { Button } from '@/components/ui/button'
 import { IconArrowElbow, IconPlus } from '@/components/ui/icons'
 import {
@@ -14,9 +12,12 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import { type AI } from '@/lib/chat/actions'
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
+import { getWS } from '@/lib/websocket'
 import { nanoid } from 'nanoid'
 import { useRouter } from 'next/navigation'
+import { BotMessage, SpinnerMessage, UserMessage } from './stocks/message'
 
 export function PromptForm({
   input,
@@ -30,11 +31,49 @@ export function PromptForm({
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
   const { submitUserMessage } = useActions()
   const [_, setMessages] = useUIState<typeof AI>()
+  const ws = getWS()
 
   React.useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus()
     }
+
+    ws.setMessageHandler((message: any) => {
+      console.log('on message', message)
+      let msg = null
+      let id = message.id
+      if (message.type === 'TEXT' && message.who === 'USER') {
+        msg = <UserMessage>{message.data}</UserMessage>
+      }
+      if (message.type === 'STATUS' && message.who === 'BOT' && message.data === 'thinking') {
+        msg = <SpinnerMessage />
+        id="spinner-" + id
+      }
+      if (message.type === 'TEXT' && message.who === 'BOT') {
+        msg = <BotMessage content={message.data} />
+      }
+      if (msg !== null) {
+        setMessages(currentMessages => {
+          if (currentMessages.length > 0) {
+            console.log(currentMessages[currentMessages.length - 1])
+          }
+          if (currentMessages.length > 0 && currentMessages[currentMessages.length - 1].id.startsWith("spinner-")) {
+            console.log('spinner')
+            currentMessages.pop()
+          }
+          if (currentMessages.length > 0 && currentMessages[currentMessages.length - 1].id == id) {
+            console.log('id same')
+            currentMessages.pop()
+          }
+          return [
+            ...currentMessages,
+            {
+              id: id,
+              display: msg
+            }
+          ]})
+      }
+    })
   }, [])
 
   return (
@@ -52,18 +91,20 @@ export function PromptForm({
         setInput('')
         if (!value) return
 
-        // Optimistically add user message UI
-        setMessages(currentMessages => [
-          ...currentMessages,
-          {
-            id: nanoid(),
-            display: <UserMessage>{value}</UserMessage>
-          }
-        ])
+        ws.sendTxt(value)
+
+        // // Optimistically add user message UI
+        // setMessages(currentMessages => [
+        //   ...currentMessages,
+        //   {
+        //     id: nanoid(),
+        //     display: <UserMessage>{value}</UserMessage>
+        //   }
+        // ])
 
         // Submit and get response message
-        const responseMessage = await submitUserMessage(value)
-        setMessages(currentMessages => [...currentMessages, responseMessage])
+        // const responseMessage = await submitUserMessage(value)
+        // setMessages(currentMessages => [...currentMessages, responseMessage])
       }}
     >
       <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background px-8 sm:rounded-md sm:border sm:px-12">
