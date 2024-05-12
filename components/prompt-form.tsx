@@ -15,7 +15,6 @@ import {
 import { type AI } from '@/lib/chat/actions'
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { getWS } from '@/lib/websocket'
-import { nanoid } from 'nanoid'
 import { useRouter } from 'next/navigation'
 import { BotMessage, SpinnerMessage, UserMessage } from './stocks/message'
 
@@ -40,7 +39,7 @@ export function PromptForm({
 
     ws.setMessageHandler((message: any) => {
       console.log('on message', message)
-      let msg = null
+      let msg: any = null
       let id = message.id
       if (message.type === 'TEXT' && message.who === 'USER') {
         msg = <UserMessage>{message.data}</UserMessage>
@@ -53,7 +52,7 @@ export function PromptForm({
         msg = <BotMessage content={message.data} />
       }
       if (msg !== null) {
-        setMessages(currentMessages => {
+        setMessages((currentMessages: any | { id: any }[]) => {
           if (currentMessages.length > 0) {
             console.log(currentMessages[currentMessages.length - 1])
           }
