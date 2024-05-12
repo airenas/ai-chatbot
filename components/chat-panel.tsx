@@ -1,13 +1,10 @@
 import * as React from 'react'
 
-import { Button } from '@/components/ui/button'
-import { PromptForm } from '@/components/prompt-form'
 import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
-import { IconShare } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
-import { ChatShareDialog } from '@/components/chat-share-dialog'
-import { useAIState, useActions, useUIState } from 'ai/rsc'
+import { PromptForm } from '@/components/prompt-form'
 import type { AI } from '@/lib/chat/actions'
+import { useAIState, useActions, useUIState } from 'ai/rsc'
 import { nanoid } from 'nanoid'
 import { UserMessage } from './stocks/message'
 
@@ -28,32 +25,30 @@ export function ChatPanel({
   isAtBottom,
   scrollToBottom
 }: ChatPanelProps) {
-  const [aiState] = useAIState()
   const [messages, setMessages] = useUIState<typeof AI>()
   const { submitUserMessage } = useActions()
-  const [shareDialogOpen, setShareDialogOpen] = React.useState(false)
-
+  
   const exampleMessages = [
     {
-      heading: 'What are the',
-      subheading: 'trending memecoins today?',
-      message: `What are the trending memecoins today?`
+      heading: 'Kur policijos ministras šiuo metu?',
+      subheading: 'Olia, olia, kur policijos ministras šiuo metu?',
+      message: `Kur policijos ministras šiuo metu?`
     },
+    // {
+    //   heading: 'What is the price of',
+    //   subheading: '$DOGE right now?',
+    //   message: 'What is the price of $DOGE right now?'
+    // },
     {
-      heading: 'What is the price of',
-      subheading: '$DOGE right now?',
-      message: 'What is the price of $DOGE right now?'
+      heading: 'Aš noriu iškvieti',
+      subheading: 'policijs ekipažą',
+      message: `Kaip iškviesti policijos ekipažą?`
     },
-    {
-      heading: 'I would like to buy',
-      subheading: '42 $DOGE',
-      message: `I would like to buy 42 $DOGE`
-    },
-    {
-      heading: 'What are some',
-      subheading: `recent events about $DOGE?`,
-      message: `What are some recent events about $DOGE?`
-    }
+    // {
+    //   heading: 'What are some',
+    //   subheading: `recent events about $DOGE?`,
+    //   message: `What are some recent events about $DOGE?`
+    // }
   ]
 
   return (
@@ -69,9 +64,8 @@ export function ChatPanel({
             exampleMessages.map((example, index) => (
               <div
                 key={example.heading}
-                className={`cursor-pointer rounded-lg border bg-white p-4 hover:bg-zinc-50 dark:bg-zinc-950 dark:hover:bg-zinc-900 ${
-                  index > 1 && 'hidden md:block'
-                }`}
+                className={`cursor-pointer rounded-lg border bg-white p-4 hover:bg-zinc-50 dark:bg-zinc-950 dark:hover:bg-zinc-900 ${index > 1 && 'hidden md:block'
+                  }`}
                 onClick={async () => {
                   setMessages((currentMessages: any) => [
                     ...currentMessages,
