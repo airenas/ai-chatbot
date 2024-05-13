@@ -1,8 +1,4 @@
-import { UseChatHelpers } from 'ai/react'
-
-import { Button } from '@/components/ui/button'
 import { ExternalLink } from '@/components/external-link'
-import { IconArrowRight } from '@/components/ui/icons'
 
 export function EmptyScreen() {
   return (
@@ -16,7 +12,7 @@ export function EmptyScreen() {
         </p>
         <p className="leading-normal text-muted-foreground">
           Norite paklausyti {' '}
-          <ExternalLink href="https://www.youtube.com/watch?v=EBsgTJQFl9k">
+          <ExternalLink href="https://www.youtube.com/watch?v=EBsgTJQFl9k?autoplay=1">
           Rim Tim Tagi Dim
           </ExternalLink>?
         </p>

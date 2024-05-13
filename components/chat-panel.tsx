@@ -1,12 +1,10 @@
-import * as React from 'react'
 
 import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
-import { FooterText } from '@/components/footer'
+// import { FooterText } from '@/components/footer'
 import { PromptForm } from '@/components/prompt-form'
 import type { AI } from '@/lib/chat/actions'
-import { useAIState, useActions, useUIState } from 'ai/rsc'
-import { nanoid } from 'nanoid'
-import { UserMessage } from './stocks/message'
+import { getWS } from '@/lib/websocket'
+import { useActions, useUIState } from 'ai/rsc'
 
 export interface ChatPanelProps {
   id?: string
@@ -27,28 +25,19 @@ export function ChatPanel({
 }: ChatPanelProps) {
   const [messages, setMessages] = useUIState<typeof AI>()
   const { submitUserMessage } = useActions()
+  const ws = getWS()
   
   const exampleMessages = [
     {
-      heading: 'Kur policijos ministras šiuo metu?',
-      subheading: 'Olia, olia, kur policijos ministras šiuo metu?',
-      message: `Kur policijos ministras šiuo metu?`
+      heading: 'Kas yra policijos generalinis komisaras?',
+      subheading: 'Olia, olia, kur policijos komisaras šiuo metu?',
+      message: `Kur policijos generalinis komisaras šiuo metu?`
     },
-    // {
-    //   heading: 'What is the price of',
-    //   subheading: '$DOGE right now?',
-    //   message: 'What is the price of $DOGE right now?'
-    // },
     {
       heading: 'Aš noriu iškvieti',
-      subheading: 'policijs ekipažą',
+      subheading: 'policijos ekipažą',
       message: `Kaip iškviesti policijos ekipažą?`
     },
-    // {
-    //   heading: 'What are some',
-    //   subheading: `recent events about $DOGE?`,
-    //   message: `What are some recent events about $DOGE?`
-    // }
   ]
 
   return (
@@ -67,22 +56,23 @@ export function ChatPanel({
                 className={`cursor-pointer rounded-lg border bg-white p-4 hover:bg-zinc-50 dark:bg-zinc-950 dark:hover:bg-zinc-900 ${index > 1 && 'hidden md:block'
                   }`}
                 onClick={async () => {
-                  setMessages((currentMessages: any) => [
-                    ...currentMessages,
-                    {
-                      id: nanoid(),
-                      display: <UserMessage>{example.message}</UserMessage>
-                    }
-                  ])
+                  ws.sendTxt(example.message)
+                  // setMessages((currentMessages: any) => [
+                  //   ...currentMessages,
+                  //   {
+                  //     id: nanoid(),
+                  //     display: <UserMessage>{example.message}</UserMessage>
+                  //   }
+                  // ])
 
-                  const responseMessage = await submitUserMessage(
-                    example.message
-                  )
+                  // const responseMessage = await submitUserMessage(
+                  //   example.message
+                  // )
 
-                  setMessages((currentMessages: any) => [
-                    ...currentMessages,
-                    responseMessage
-                  ])
+                  // setMessages((currentMessages: any) => [
+                  //   ...currentMessages,
+                  //   responseMessage
+                  // ])
                 }}
               >
                 <div className="text-sm font-semibold">{example.heading}</div>
@@ -95,7 +85,7 @@ export function ChatPanel({
 
         <div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
           <PromptForm input={input} setInput={setInput} />
-          <FooterText className="hidden sm:block" />
+          {/* <FooterText className="hidden sm:block" /> */}
         </div>
       </div>
     </div>
