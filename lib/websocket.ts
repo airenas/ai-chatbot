@@ -19,7 +19,8 @@ class WebSocketWrapper {
     private closeHandler: CloseHandler | null = null;
 
     constructor(url: string) {
-        this.ws = io(url);
+        console.log('server url', url)
+        this.ws = io(url, { path: "/ai-demo-service/ws/socket.io" })
 
         this.ws.on('connect', () => {
             console.log('WebSocket connected')
@@ -79,7 +80,7 @@ let ws: WebSocketWrapper | null = null;
 
 export function getWS(): WebSocketWrapper {
     if (ws === null) {
-        ws = new WebSocketWrapper('ws://localhost:8007')
+        ws = new WebSocketWrapper('wss://worker1.mywire.org')
     }
     return ws
 }
