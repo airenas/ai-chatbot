@@ -127,10 +127,10 @@ export function PromptForm({
             <TooltipTrigger asChild>
               <Button type="submit" size="icon" disabled={input === ''}>
                 <IconArrowElbow />
-                <span className="sr-only">Send message</span>
+                <span className="sr-only">Siųsti žinutę</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Send message</TooltipContent>
+            <TooltipContent>Siųsti žinutę</TooltipContent>
           </Tooltip>
         </div>
       </div>
