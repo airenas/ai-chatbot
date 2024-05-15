@@ -79,8 +79,10 @@ class WebSocketWrapper {
 let ws: WebSocketWrapper | null = null;
 
 export function getWS(): WebSocketWrapper {
+    const url = process.env.NEXT_PUBLIC_WS_URL || 'wss://worker1.mywire.org'
+    console.log('ws: ', url)
     if (ws === null) {
-        ws = new WebSocketWrapper('wss://worker1.mywire.org')
+        ws = new WebSocketWrapper(url)
     }
     return ws
 }
