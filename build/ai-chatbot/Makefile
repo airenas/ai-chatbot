@@ -6,7 +6,7 @@ docker_dir=builds
 tag=$(service):$(version)
 
 dbuild: 
-	cd ../ && docker build -t $(tag) --build-arg BUILD_VERSION=$(version) -f $(docker_dir)/Dockerfile .
+	cd ../../ && docker build -t $(tag) --build-arg BUILD_VERSION=$(version) -f $(docker_dir)/Dockerfile .
 
 dpush: dbuild
 	docker push $(tag)
