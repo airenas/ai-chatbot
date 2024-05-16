@@ -23,8 +23,7 @@ class WebSocketWrapper {
         this.ws = io(url, { path: "/ai-demo-service/ws/socket.io" })
 
         this.ws.on('connect', () => {
-            console.log('WebSocket connected')
-            // Optionally, you can add some logic here when the connection is established.
+            console.log('ws connected')
         });
 
         this.ws.on('message', (data: any) => {
@@ -53,7 +52,7 @@ class WebSocketWrapper {
     sendTxt(id: string, data: any): void {
         console.log('send message', data, id)
         if (this.ws) {
-            this.ws.emit('message', { type: "TEXT", data: data, id: id, who: "USER"});
+            this.ws.emit('message', { type: "TEXT", data: data, id: id, who: "USER" });
         } else {
             console.warn("no socket")
         }
@@ -79,8 +78,7 @@ class WebSocketWrapper {
 let ws: WebSocketWrapper | null = null;
 
 export function getWS(): WebSocketWrapper {
-    const url = process.env.NEXT_PUBLIC_WS_URL || 'wss://worker1.mywire.org'
-    console.log('ws: ', url)
+    const url = process.env.NEXT_PUBLIC_WS_URL || 'wss://worker1.mywire.org' // does not work env setting!
     if (ws === null) {
         ws = new WebSocketWrapper(url)
     }
