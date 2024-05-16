@@ -6,7 +6,7 @@ import Textarea from 'react-textarea-autosize'
 import { useActions, useUIState } from 'ai/rsc'
 
 import { Button } from '@/components/ui/button'
-import { IconArrowElbow} from '@/components/ui/icons'
+import { IconArrowElbow } from '@/components/ui/icons'
 import {
   Tooltip,
   TooltipContent,
@@ -14,9 +14,11 @@ import {
 } from '@/components/ui/tooltip'
 import { type AI } from '@/lib/chat/actions'
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
+import { Streamer } from '@/lib/stream-value'
 import { getWS } from '@/lib/websocket'
 import { useRouter } from 'next/navigation'
 import { BotMessage, SpinnerMessage, UserMessage } from './stocks/message'
+import { nanoid } from 'ai'
 
 export function PromptForm({
   input,
@@ -46,10 +48,11 @@ export function PromptForm({
       }
       if (message.type === 'STATUS' && message.who === 'BOT' && message.data === 'thinking') {
         msg = <SpinnerMessage />
-        id="spinner-" + id
+        id = "spinner-" + id
       }
       if (message.type === 'TEXT' && message.who === 'BOT') {
-        msg = <BotMessage content={message.data} />
+        const streamable = new Streamer(message.data);
+        msg = <BotMessage content={streamable} />
       }
       if (msg !== null) {
         setMessages((currentMessages: any | { id: any }[]) => {
@@ -61,16 +64,21 @@ export function PromptForm({
             currentMessages.pop()
           }
           if (currentMessages.length > 0 && currentMessages[currentMessages.length - 1].id == id) {
-            console.log('id same')
+            currentMessages[currentMessages.length - 1].display = msg
+            console.log('msg id same', currentMessages[currentMessages.length - 1])
+            id = id + '-1'
             currentMessages.pop()
           }
+          console.log('msg id', id)
           return [
             ...currentMessages,
             {
               id: id,
               display: msg
             }
-          ]})
+          ]
+
+        })
       }
     })
   }, [])
@@ -90,20 +98,17 @@ export function PromptForm({
         setInput('')
         if (!value) return
 
-        ws.sendTxt(value)
+        const id = nanoid()
+        ws.sendTxt(id, value)
 
-        // // Optimistically add user message UI
-        // setMessages(currentMessages => [
-        //   ...currentMessages,
-        //   {
-        //     id: nanoid(),
-        //     display: <UserMessage>{value}</UserMessage>
-        //   }
-        // ])
-
-        // Submit and get response message
-        // const responseMessage = await submitUserMessage(value)
-        // setMessages(currentMessages => [...currentMessages, responseMessage])
+        // Optimistically add user message UI
+        setMessages(currentMessages => [
+          ...currentMessages,
+          {
+            id: id,
+            display: <UserMessage>{value}</UserMessage>
+          }
+        ])
       }}
     >
       <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background px-8 sm:rounded-md sm:border sm:px-12">

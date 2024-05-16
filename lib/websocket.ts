@@ -50,10 +50,10 @@ class WebSocketWrapper {
         });
     }
 
-    sendTxt(data: any): void {
-        console.log('send message', data)
+    sendTxt(id: string, data: any): void {
+        console.log('send message', data, id)
         if (this.ws) {
-            this.ws.emit('message', { type: "TEXT", data: data });
+            this.ws.emit('message', { type: "TEXT", data: data, id: id, who: "USER"});
         } else {
             console.warn("no socket")
         }

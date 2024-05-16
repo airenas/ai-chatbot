@@ -1,18 +1,18 @@
-import { StreamableValue, readStreamableValue } from 'ai/rsc'
 import { useEffect, useState } from 'react'
+import { Streamer } from '../stream-value'
 
 export const useStreamableText = (
-  content: string | StreamableValue<string>
+  content: string | Streamer
 ) => {
   const [rawContent, setRawContent] = useState(
     typeof content === 'string' ? content : ''
   )
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (typeof content === 'object') {
         let value = ''
-        for await (const delta of readStreamableValue(content)) {
+        for await (const delta of content.stringToAsyncIterable()) {
           if (typeof delta === 'string') {
             setRawContent((value = value + delta))
           }

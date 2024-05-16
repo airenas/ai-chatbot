@@ -3,36 +3,35 @@ import 'server-only'
 import {
   createAI,
   createStreamableUI,
+  createStreamableValue,
   getMutableAIState,
-  getAIState,
-  render,
-  createStreamableValue
+  render
 } from 'ai/rsc'
 import OpenAI from 'openai'
 
 import {
-  spinner,
   BotCard,
   BotMessage,
-  SystemMessage,
+  Purchase,
   Stock,
-  Purchase
+  SystemMessage,
+  spinner
 } from '@/components/stocks'
 
-import { z } from 'zod'
-import { EventsSkeleton } from '@/components/stocks/events-skeleton'
 import { Events } from '@/components/stocks/events'
-import { StocksSkeleton } from '@/components/stocks/stocks-skeleton'
-import { Stocks } from '@/components/stocks/stocks'
+import { EventsSkeleton } from '@/components/stocks/events-skeleton'
+import { SpinnerMessage, UserMessage } from '@/components/stocks/message'
 import { StockSkeleton } from '@/components/stocks/stock-skeleton'
+import { Stocks } from '@/components/stocks/stocks'
+import { StocksSkeleton } from '@/components/stocks/stocks-skeleton'
+import { Chat } from '@/lib/types'
 import {
   formatNumber,
+  nanoid,
   runAsyncFnWithoutBlocking,
-  sleep,
-  nanoid
+  sleep
 } from '@/lib/utils'
-import { SpinnerMessage, UserMessage } from '@/components/stocks/message'
-import { Chat } from '@/lib/types'
+import { z } from 'zod'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || ''
@@ -102,9 +101,8 @@ async function confirmPurchase(symbol: string, price: number, amount: number) {
         {
           id: nanoid(),
           role: 'system',
-          content: `[User has purchased ${amount} shares of ${symbol} at ${price}. Total cost = ${
-            amount * price
-          }]`
+          content: `[User has purchased ${amount} shares of ${symbol} at ${price}. Total cost = ${amount * price
+            }]`
         }
       ]
     })
@@ -171,7 +169,7 @@ Besides that, you can also chat with users and do some calculations if needed.`
     text: ({ content, done, delta }) => {
       if (!textStream) {
         textStream = createStreamableValue('')
-        textNode = <BotMessage content={textStream.value} />
+        // textNode = <BotMessage content={textStream.value} />
       }
 
       if (done) {

@@ -5,6 +5,8 @@ import { PromptForm } from '@/components/prompt-form'
 import type { AI } from '@/lib/chat/actions'
 import { getWS } from '@/lib/websocket'
 import { useActions, useUIState } from 'ai/rsc'
+import { nanoid } from 'nanoid'
+import { UserMessage } from './stocks/message'
 
 export interface ChatPanelProps {
   id?: string
@@ -26,7 +28,7 @@ export function ChatPanel({
   const [messages, setMessages] = useUIState<typeof AI>()
   const { submitUserMessage } = useActions()
   const ws = getWS()
-  
+
   const exampleMessages = [
     {
       heading: 'Kas yra policijos generalinis komisaras?',
@@ -56,23 +58,15 @@ export function ChatPanel({
                 className={`cursor-pointer rounded-lg border bg-white p-4 hover:bg-zinc-50 dark:bg-zinc-950 dark:hover:bg-zinc-900 ${index > 1 && 'hidden md:block'
                   }`}
                 onClick={async () => {
-                  ws.sendTxt(example.message)
-                  // setMessages((currentMessages: any) => [
-                  //   ...currentMessages,
-                  //   {
-                  //     id: nanoid(),
-                  //     display: <UserMessage>{example.message}</UserMessage>
-                  //   }
-                  // ])
-
-                  // const responseMessage = await submitUserMessage(
-                  //   example.message
-                  // )
-
-                  // setMessages((currentMessages: any) => [
-                  //   ...currentMessages,
-                  //   responseMessage
-                  // ])
+                  const id = nanoid()
+                  ws.sendTxt(id, example.message)
+                  setMessages((currentMessages: any) => [
+                    ...currentMessages,
+                    {
+                      id: id,
+                      display: <UserMessage>{example.message}</UserMessage>
+                    }
+                  ])
                 }}
               >
                 <div className="text-sm font-semibold">{example.heading}</div>

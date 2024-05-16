@@ -9,6 +9,7 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import { StreamableValue } from 'ai/rsc'
 import { useStreamableText } from '@/lib/hooks/use-streamable-text'
+import { Streamer } from '@/lib/stream-value'
 
 // Different types of message bubbles.
 
@@ -29,7 +30,7 @@ export function BotMessage({
   content,
   className
 }: {
-  content: string | StreamableValue<string>
+  content: string | Streamer
   className?: string
 }) {
   const text = useStreamableText(content)
