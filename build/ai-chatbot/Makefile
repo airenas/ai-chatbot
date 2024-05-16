@@ -1,7 +1,7 @@
 #####################################################################################
 service=airenas/ai-chatbot
 version?=dev
-docker_dir=builds
+docker_dir=build/ai-chatbot
 ########### DOCKER ##################################################################
 tag=$(service):$(version)
 
