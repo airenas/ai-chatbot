@@ -7,6 +7,7 @@ import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
 import { Header } from '@/components/header'
+import VersionLogger from './version-logger'
 
 export const metadata = {
   metadataBase: process.env.VERCEL_URL
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           GeistMono.variable
         )}
       >
+        <VersionLogger />
         <Toaster position="top-center" />
         <Providers
           attribute="class"
