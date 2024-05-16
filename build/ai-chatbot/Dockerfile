@@ -6,6 +6,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
+ARG BUILD_VERSION=0.1
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
@@ -22,7 +23,7 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN echo 'export const VERSION = "$BUILD_VERSION"' > /app/app/version.ts
+RUN echo "export const VERSION = \"$BUILD_VERSION\"" > /app/app/version.ts
 RUN npm run build
 
 # 3. Production image, copy all the files and run next
