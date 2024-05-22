@@ -31,14 +31,14 @@ export function ChatPanel({
 
   const exampleMessages = [
     {
-      heading: 'Kas yra policijos generalinis komisaras?',
-      subheading: 'Olia, olia, kur policijos komisaras šiuo metu?',
-      message: `Kur policijos generalinis komisaras šiuo metu?`
+      heading: 'DiPOLIS',
+      subheading: 'Kaip man gali padėti šis robotas?',
+      message: `Kas yra DiPOLIS pokalbių robotas? Kaip man gali padėti šis robotas?`
     },
     {
-      heading: 'Aš noriu iškvieti',
-      subheading: 'policijos ekipažą',
-      message: `Kaip iškviesti policijos ekipažą?`
+      heading: 'Informacija',
+      subheading: 'Apie ką galiu gauti atsakymus iš šio roboto',
+      message: `Apie ką galiu gauti atsakymus iš pokalbių roboto DiPOLIS?`
     },
   ]
 
