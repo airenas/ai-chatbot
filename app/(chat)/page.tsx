@@ -3,7 +3,7 @@ import { AI } from '@/lib/chat/actions'
 import { nanoid } from '@/lib/utils'
 
 export const metadata = {
-  title: 'Policijos pagalbos robotas'
+  title: 'DiPOLIS pokalbių robotas',
 }
 
 export default async function IndexPage() {

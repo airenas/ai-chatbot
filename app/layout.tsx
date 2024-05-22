@@ -14,10 +14,10 @@ export const metadata = {
     ? new URL(`https://${process.env.VERCEL_URL}`)
     : undefined,
   title: {
-    default: 'AI policijos robotas',
-    template: `%s - AI policijos robotas`
+    default: 'DiPOLIS',
+    template: `%s`
   },
-  description: 'AI policijos robotas',
+  description: 'Policijos pokalbių robotas',
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',
