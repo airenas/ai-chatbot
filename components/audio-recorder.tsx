@@ -1,4 +1,7 @@
 import { useAppContext } from '@/app/app-context';
+import AudioResampler from '@/lib/audio-resampler';
+import { getWS } from '@/lib/websocket';
+import { nanoid } from 'ai';
 import { useTheme } from 'next-themes';
 import React, { useRef } from 'react';
 import { Button } from './ui/button';
@@ -6,7 +9,6 @@ import { Button } from './ui/button';
 const AudioRecorder: React.FC = () => {
     const { theme } = useTheme()
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const audioChunksRef = useRef<Blob[]>([]);
     const { isRecording, setRecording } = useAppContext()
     const audioContextRef = useRef<AudioContext | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
@@ -18,6 +20,9 @@ const AudioRecorder: React.FC = () => {
     const analyserRef = useRef<AnalyserNode | null>(null);
     const dataArrayRef = useRef<Uint8Array | null>(null);
     const animationIdRef = useRef<number | null>(null);
+    const ws = getWS();
+    let rec_id = nanoid();
+
 
     const handleMouseDown = (event: React.MouseEvent) => {
         if (event.button === 0) {
@@ -34,7 +39,8 @@ const AudioRecorder: React.FC = () => {
     const handleTouchEnd = () => stopRecording();
 
     const startRecording = async () => {
-        console.log('start');
+        rec_id = nanoid();
+        console.log(`start ${rec_id}`);
         try {
             if (!audioContextRef.current) {
                 audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -87,20 +93,19 @@ const AudioRecorder: React.FC = () => {
                     },
                 });
                 workletNodeRef.current = workletNode;
-
+                ws.sendAudioEvent(rec_id, true);
                 source.connect(workletNode);
-                // const resampler = new AudioResampler(audioContext.sampleRate, 16000); // Assuming cfg.sampleRate is 16000
+                const resampler = new AudioResampler(audioContext.sampleRate, 16000); // Assuming cfg.sampleRate is 16000
 
                 workletNode.port.onmessage = (event) => {
                     console.log('event:', event);
                     if (event.data.type === 'audioData') {
                         const buffer = event.data.data;
-                        // if (buffer.length > 0 && transcriberReady) {
-                        //   const pcmData = resampler.downsampleAndConvertToPCM(buffer);
-                        //   setAudio((prevAudio) => [...prevAudio, pcmData]);
-                        // Assume transcriber is available and correctly implemented
-                        //   transcriber.sendAudio(pcmData);
-                        // }
+                        if (buffer.length > 0) {
+                            const pcmData = resampler.downsampleAndConvertToPCM(buffer);
+                            console.debug(`len orig: ${buffer.length}, downsampled: ${pcmData.length}`);
+                            ws.sendAudio(rec_id, pcmData);
+                        }
                         // if (!transcriberReady) {
                         //   setTranscriberReady(true);
                         //   transcriber.init();
@@ -109,42 +114,14 @@ const AudioRecorder: React.FC = () => {
                         // }
                     }
                 };
-
                 setRecording(true);
                 draw(canvasCtx, canvas);
-                // // Assume updateComponents and draw are available and correctly implemented
-                // updateComponents();
-                // draw();
             }
         } catch (error) {
             console.error(error);
-            // Assume addMsg and stop are available and correctly implemented
-            // addMsg(true, "Can't start recording");
-            // stop();
+            ws.sendAudioEvent(rec_id, false);
+            stopRecording()
         }
-        // };
-
-
-
-        // try {
-
-        //     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        //     mediaRecorderRef.current = new MediaRecorder(stream);
-        //     mediaRecorderRef.current.ondataavailable = (event: BlobEvent) => {
-        //         audioChunksRef.current.push(event.data);
-        //     };
-        //     mediaRecorderRef.current.onstop = () => {
-        //         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-        //         const audioUrl = URL.createObjectURL(audioBlob);
-        //         console.log('audioUrl:', audioUrl);
-        //         // setAudioURL(audioUrl);
-        //         audioChunksRef.current = [];
-        //     };
-        //     mediaRecorderRef.current.start();
-        //     setRecording(true);
-        // } catch (err) {
-        //     console.error('Error accessing audio stream:', err);
-        // }
     };
 
     const stopRecording = () => {
@@ -157,6 +134,9 @@ const AudioRecorder: React.FC = () => {
         if (sourceRef.current) {
             sourceRef.current.disconnect()
         };
+        if (isRecording) {
+            ws.sendAudioEvent(rec_id, false);
+        }
         stopStream()
         setRecording(false);
     };

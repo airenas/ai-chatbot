@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const AppContext = createContext({
     useVoice: false,
@@ -10,8 +10,18 @@ const AppContext = createContext({
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
-    const [useVoice, setUseVoice] = useState(false)
-    const toggleVoice = () => setUseVoice(prev => !prev)
+    const [useVoice, setUseVoice] = useState<boolean>(() => {
+        // Initialize useVoice from local storage
+        const saved = localStorage.getItem('useVoice');
+        return saved ? JSON.parse(saved) : false;
+    });
+
+    const toggleVoice = () => setUseVoice(prev => !prev);
+
+    useEffect(() => {
+        localStorage.setItem('useVoice', JSON.stringify(useVoice));
+    }, [useVoice]);
+
     const [isRecording, setRecording] = useState(false)
 
     return (

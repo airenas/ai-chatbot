@@ -35,7 +35,7 @@ export function PromptForm({
   const { submitUserMessage } = useActions()
   const [_, setMessages] = useUIState<typeof AI>()
   const ws = getWS()
-  const { useVoice, isRecording, setRecording } = useAppContext()
+  const { useVoice, isRecording } = useAppContext()
 
   React.useEffect(() => {
     if (inputRef.current) {

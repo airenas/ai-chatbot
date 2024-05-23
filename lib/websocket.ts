@@ -58,6 +58,25 @@ class WebSocketWrapper {
         }
     }
 
+    sendAudio(id: string, data: any): void {
+        console.log('send message', data, id)
+        if (this.ws) {
+            this.ws.emit('message', { type: "AUDIO", data: data, id: id, who: "USER" });
+        } else {
+            console.warn("no socket")
+        }
+    }
+
+    sendAudioEvent(id: string, start: boolean) {
+        if (this.ws) {
+            const msg = start ? "AUDIO_START" : "AUDIO_STOP"
+            console.log('send event', msg, id)
+            this.ws.emit('message', { type: "EVENT", data: msg, id: id, who: "USER" });
+        } else {
+            console.warn("no socket")
+        }
+    }
+
     setMessageHandler(handler: MessageHandler): void {
         this.messageHandler = handler;
     }
