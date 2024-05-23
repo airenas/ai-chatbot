@@ -5,8 +5,9 @@ import Textarea from 'react-textarea-autosize'
 
 import { useActions, useUIState } from 'ai/rsc'
 
+import { useAppContext } from '@/app/app-context'
 import { Button } from '@/components/ui/button'
-import { IconArrowElbow } from '@/components/ui/icons'
+import { IconArrowElbow, IconStop } from '@/components/ui/icons'
 import {
   Tooltip,
   TooltipContent,
@@ -16,9 +17,10 @@ import { type AI } from '@/lib/chat/actions'
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { Streamer } from '@/lib/stream-value'
 import { getWS } from '@/lib/websocket'
+import { nanoid } from 'ai'
 import { useRouter } from 'next/navigation'
 import { BotMessage, SpinnerMessage, UserMessage } from './stocks/message'
-import { nanoid } from 'ai'
+import AudioRecorder from './audio-recorder'
 
 export function PromptForm({
   input,
@@ -33,6 +35,7 @@ export function PromptForm({
   const { submitUserMessage } = useActions()
   const [_, setMessages] = useUIState<typeof AI>()
   const ws = getWS()
+  const { useVoice, isRecording, setRecording } = useAppContext()
 
   React.useEffect(() => {
     if (inputRef.current) {
@@ -127,17 +130,24 @@ export function PromptForm({
           value={input}
           onChange={e => setInput(e.target.value)}
         />
-        <div className="absolute right-0 top-[13px] sm:right-4">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button type="submit" size="icon" disabled={input === ''}>
-                <IconArrowElbow />
-                <span className="sr-only">Siųsti žinutę</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Siųsti žinutę</TooltipContent>
-          </Tooltip>
-        </div>
+
+        {useVoice ? (
+          <div className="absolute right-0 top-[13px] sm:right-4">
+            <AudioRecorder />
+          </div>
+        ) : (
+          <div className="absolute right-0 top-[13px] sm:right-4">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button type="submit" size="icon" disabled={input === ''}>
+                  <IconArrowElbow />
+                  <span className="sr-only">Siųsti žinutę</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Siųsti žinutę</TooltipContent>
+            </Tooltip>
+          </div>
+        )}
       </div>
     </form>
   )

@@ -11,6 +11,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { useRouter } from 'next/navigation'
+import { VoiceToggle } from './voice-toggle'
 
 
 export function Header() {
@@ -37,7 +38,10 @@ export function Header() {
         <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
         </React.Suspense>
       </div>
-      <ThemeToggle />
+      <div>
+        <VoiceToggle />
+        <ThemeToggle />
+      </div>
     </header>
   )
 }
