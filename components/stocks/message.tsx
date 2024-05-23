@@ -1,15 +1,15 @@
 'use client'
 
-import { IconLTPolicija, IconUser } from '@/components/ui/icons'
-import { cn } from '@/lib/utils'
-import { spinner } from './spinner'
-import { CodeBlock } from '../ui/codeblock'
-import { MemoizedReactMarkdown } from '../markdown'
-import remarkGfm from 'remark-gfm'
-import remarkMath from 'remark-math'
-import { StreamableValue } from 'ai/rsc'
+import { IconLTPolicija, IconShare, IconStop, IconUser } from '@/components/ui/icons'
 import { useStreamableText } from '@/lib/hooks/use-streamable-text'
 import { Streamer } from '@/lib/stream-value'
+import { cn } from '@/lib/utils'
+import { useRef, useState } from 'react'
+import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
+import { MemoizedReactMarkdown } from '../markdown'
+import { CodeBlock } from '../ui/codeblock'
+import { spinner } from './spinner'
 
 // Different types of message bubbles.
 
@@ -34,9 +34,41 @@ export function BotMessage({
   className?: string
 }) {
   const text = useStreamableText(content)
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  function handleTTSClick(event: any): void {
+    event.preventDefault()
+    console.log('TTS clicked')
+    event.preventDefault();
+    if (isPlaying) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      setIsPlaying(false);
+    } else {
+      if (audioRef.current) {
+        console.log('stop audio')
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      } else {
+        console.log('new audio')
+      }
+      const audio = new Audio('http://localhost:8007/ai-demo-service/tts');
+      audioRef.current = audio;
+      audio.play();
+      setIsPlaying(true);
+      audio.onended = () => setIsPlaying(false);
+    }
+  }
 
   return (
-    <div className={cn('group relative flex items-start md:-ml-12', className)}>
+    <div className={cn('group relative flex items-start md:-ml-12', className)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="flex size-[24px] shrink-0 select-none items-center justify-center rounded-md border bg-primary text-primary-foreground shadow-sm">
         <IconLTPolicija />
       </div>
@@ -83,6 +115,14 @@ export function BotMessage({
           {text}
         </MemoizedReactMarkdown>
       </div>
+      {(isHovered || isPlaying) && (
+        <div
+          className="absolute bottom-0 left-4 mb-2 ml-2"
+          onClick={handleTTSClick}
+        >
+          {isPlaying ? <IconStop /> : <IconShare />}
+        </div>
+      )}
     </div>
   )
 }

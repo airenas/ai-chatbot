@@ -52,7 +52,7 @@ export function PromptForm({
       if (message.type === 'TEXT' && message.who === 'RECOGNIZER') {
         console.log('on text', message.data)
         setInput(message.data);
-        console.log('Input state updated:', input); 
+        console.log('Input state updated:', input);
       }
       if (message.type === 'STATUS' && message.who === 'BOT' && message.data === 'thinking') {
         msg = <SpinnerMessage />
@@ -89,7 +89,7 @@ export function PromptForm({
         })
       }
     })
-  }, [setInput, setMessages, ws])
+  }, [setInput, input, setMessages, ws])
 
   return (
     <form
