@@ -98,12 +98,12 @@ const AudioRecorder: React.FC = () => {
                 const resampler = new AudioResampler(audioContext.sampleRate, 16000); // Assuming cfg.sampleRate is 16000
 
                 workletNode.port.onmessage = (event) => {
-                    console.log('event:', event);
+                    // console.log('event:', event);
                     if (event.data.type === 'audioData') {
                         const buffer = event.data.data;
                         if (buffer.length > 0) {
                             const pcmData = resampler.downsampleAndConvertToPCM(buffer);
-                            console.debug(`len orig: ${buffer.length}, downsampled: ${pcmData.length}`);
+                            // console.debug(`len orig: ${buffer.length}, downsampled: ${pcmData.length}`);
                             ws.sendAudio(rec_id, pcmData);
                         }
                         // if (!transcriberReady) {

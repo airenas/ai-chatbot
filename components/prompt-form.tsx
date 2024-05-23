@@ -7,7 +7,7 @@ import { useActions, useUIState } from 'ai/rsc'
 
 import { useAppContext } from '@/app/app-context'
 import { Button } from '@/components/ui/button'
-import { IconArrowElbow, IconStop } from '@/components/ui/icons'
+import { IconArrowElbow } from '@/components/ui/icons'
 import {
   Tooltip,
   TooltipContent,
@@ -19,8 +19,8 @@ import { Streamer } from '@/lib/stream-value'
 import { getWS } from '@/lib/websocket'
 import { nanoid } from 'ai'
 import { useRouter } from 'next/navigation'
-import { BotMessage, SpinnerMessage, UserMessage } from './stocks/message'
 import AudioRecorder from './audio-recorder'
+import { BotMessage, SpinnerMessage, UserMessage } from './stocks/message'
 
 export function PromptForm({
   input,
@@ -49,6 +49,11 @@ export function PromptForm({
       if (message.type === 'TEXT' && message.who === 'USER') {
         msg = <UserMessage>{message.data}</UserMessage>
       }
+      if (message.type === 'TEXT' && message.who === 'RECOGNIZER') {
+        console.log('on text', message.data)
+        setInput(message.data);
+        console.log('Input state updated:', input); 
+      }
       if (message.type === 'STATUS' && message.who === 'BOT' && message.data === 'thinking') {
         msg = <SpinnerMessage />
         id = "spinner-" + id
@@ -72,7 +77,7 @@ export function PromptForm({
             id = id + '-1'
             currentMessages.pop()
           }
-          console.log('msg id', id)
+          // console.log('msg id', id)
           return [
             ...currentMessages,
             {
@@ -84,7 +89,7 @@ export function PromptForm({
         })
       }
     })
-  }, [])
+  }, [setInput, setMessages, ws])
 
   return (
     <form

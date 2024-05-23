@@ -27,9 +27,9 @@ class WebSocketWrapper {
         });
 
         this.ws.on('message', (data: any) => {
-            console.log('on message', data)
+            // console.log('on message', data)
             if (this.messageHandler) {
-                console.log('send to on message', data)
+                // console.log('send to on message', data)
                 this.messageHandler(data);
             }
         });
@@ -59,7 +59,7 @@ class WebSocketWrapper {
     }
 
     sendAudio(id: string, data: any): void {
-        console.log('send message', data, id)
+        // console.log('send message', data, id)
         if (this.ws) {
             this.ws.emit('message', { type: "AUDIO", data: data, id: id, who: "USER" });
         } else {
