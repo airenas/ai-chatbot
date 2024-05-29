@@ -9,7 +9,7 @@ import { Button } from './ui/button';
 const AudioRecorder: React.FC = () => {
     const { theme } = useTheme()
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const { isRecording, setRecording } = useAppContext()
+    const { isRecording, setRecording, isReading } = useAppContext()
     const audioContextRef = useRef<AudioContext | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
 
@@ -181,6 +181,7 @@ const AudioRecorder: React.FC = () => {
                 onTouchEnd={handleTouchEnd}
                 onTouchCancel={handleTouchEnd}  // To handle the case when the touch is canceled
                 style={{ position: 'relative', overflow: 'hidden', padding: 0, width: 128 }}
+                disabled={isReading}
             >
                 <canvas ref={canvasRef} className={!isRecording ? 'hidden' : ''}
                     style={{

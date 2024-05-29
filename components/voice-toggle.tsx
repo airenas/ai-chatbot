@@ -5,10 +5,15 @@ import { useAppContext } from '@/app/app-context'
 import { Button } from '@/components/ui/button'
 
 export function VoiceToggle() {
-  const { useVoice, toggleVoice, isRecording } = useAppContext()
+  const { useVoice, toggleVoice, isRecording, isReading } = useAppContext()
 
   return (
     <>
+      {isReading ? (
+        <span color='red'>Speaking { }</span>
+      ) : (
+        <span></span>
+      )}
       {isRecording ? (
         <span color='red'>Recording { }</span>
       ) : (

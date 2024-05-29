@@ -1,10 +1,11 @@
 'use client'
 
-import { IconLTPolicija, IconShare, IconStop, IconUser } from '@/components/ui/icons'
+import { useAppContext } from '@/app/app-context'
+import { IconLTPolicija, IconShare, IconSpinner, IconStop, IconUser } from '@/components/ui/icons'
 import { useStreamableText } from '@/lib/hooks/use-streamable-text'
 import { Streamer } from '@/lib/stream-value'
 import { cn } from '@/lib/utils'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import { MemoizedReactMarkdown } from '../markdown'
@@ -40,7 +41,10 @@ export function BotMessage({
   const text = useStreamableText(content)
   const [isHovered, setIsHovered] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [wasPlayed, setWasPlayed] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { isReading, setReading, useVoice } = useAppContext();
 
   function handleTTSClick(event: any): void {
     event.preventDefault()
@@ -52,7 +56,16 @@ export function BotMessage({
         audioRef.current.currentTime = 0;
       }
       setIsPlaying(false);
+      setIsLoading(false);
+      setReading(false);
     } else {
+      play();
+    }
+  }
+
+  function play(): void {
+    if (!isPlaying && !isReading) {
+      setIsLoading(true);
       if (audioRef.current) {
         console.log('stop audio')
         audioRef.current.pause();
@@ -62,11 +75,32 @@ export function BotMessage({
       }
       const audio = new Audio(`http://localhost:8007/ai-demo-service/tts/${sessionId}/${id}`);
       audioRef.current = audio;
+
+      audio.oncanplaythrough = () => {
+        setIsLoading(false);
+      };
+      audio.onended = () => {
+        setIsPlaying(false);
+        setReading(false);
+      }
       audio.play();
       setIsPlaying(true);
-      audio.onended = () => setIsPlaying(false);
+      setReading(true);
     }
   }
+
+  useEffect(() => {
+    if (!wasPlayed && !isReading && useVoice) {
+      setWasPlayed(true);
+      play();
+    } else {
+      console.log('skip play')
+    }
+
+    return () => {
+      // console.log('Component will be unmounted');
+    };
+  }, []);
 
   return (
     <div className={cn('group relative flex items-start md:-ml-12', className)}
@@ -124,7 +158,7 @@ export function BotMessage({
           className="absolute bottom-0 left-4 mb-2 ml-2"
           onClick={handleTTSClick}
         >
-          {isPlaying ? <IconStop /> : <IconShare />}
+          {isPlaying ? (isLoading ? <IconSpinner /> : <IconStop />) : <IconShare />}
         </div>
       )}
     </div>

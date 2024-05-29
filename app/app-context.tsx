@@ -7,6 +7,8 @@ const AppContext = createContext({
     toggleVoice: () => { },
     isRecording: false,
     setRecording: (v: boolean) => { },
+    isReading: false,
+    setReading: (v: boolean) => { },
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -23,6 +25,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }, [useVoice]);
 
     const [isRecording, setRecording] = useState(false)
+    const [isReading, setReading] = useState(false)
 
     return (
         <AppContext.Provider
@@ -31,6 +34,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
                 toggleVoice,
                 isRecording,
                 setRecording,
+                isReading,
+                setReading,
             }}
         >
             {children}
