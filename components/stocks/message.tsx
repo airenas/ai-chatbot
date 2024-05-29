@@ -28,10 +28,14 @@ export function UserMessage({ children }: { children: React.ReactNode }) {
 
 export function BotMessage({
   content,
-  className
+  className,
+  sessionId,
+  id
 }: {
   content: string | Streamer
   className?: string
+  sessionId?: string
+  id?: string
 }) {
   const text = useStreamableText(content)
   const [isHovered, setIsHovered] = useState(false);
@@ -56,7 +60,7 @@ export function BotMessage({
       } else {
         console.log('new audio')
       }
-      const audio = new Audio('http://localhost:8007/ai-demo-service/tts');
+      const audio = new Audio(`http://localhost:8007/ai-demo-service/tts/${sessionId}/${id}`);
       audioRef.current = audio;
       audio.play();
       setIsPlaying(true);

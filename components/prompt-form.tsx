@@ -60,7 +60,7 @@ export function PromptForm({
       }
       if (message.type === 'TEXT' && message.who === 'BOT') {
         const streamable = new Streamer(message.data);
-        msg = <BotMessage content={streamable} />
+        msg = <BotMessage content={streamable} sessionId={message.session_id} id={message.id} />
       }
       if (msg !== null) {
         setMessages((currentMessages: any | { id: any }[]) => {
