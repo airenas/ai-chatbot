@@ -45,6 +45,7 @@ export function BotMessage({
   const [wasPlayed, setWasPlayed] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { isReading, setReading, useVoice } = useAppContext();
+  const url = process.env.NEXT_PUBLIC_BOT_URL || 'https://worker1.mywire.org'
 
   function handleTTSClick(event: any): void {
     event.preventDefault()
@@ -73,7 +74,7 @@ export function BotMessage({
       } else {
         console.log('new audio')
       }
-      const audio = new Audio(`http://localhost:8007/ai-demo-service/tts/${sessionId}/${id}`);
+      const audio = new Audio(`${url}/ai-demo-service/tts/${sessionId}/${id}`);
       audioRef.current = audio;
 
       audio.oncanplaythrough = () => {
