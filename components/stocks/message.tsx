@@ -99,7 +99,7 @@ export function BotMessage({
   }
 
   useEffect(() => {
-    if (!wasPlayed && !isReading && useVoice && lang === 'lt') {
+    if (!wasPlayed && !isReading && useVoice && language === 'lt') {
       setWasPlayed(true);
       play();
     } else {

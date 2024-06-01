@@ -9,8 +9,8 @@ export function LanguageDisplay() {
   return (
     <>
       {language !== 'lt' ? (
-        <span color='red'>{language}{ }</span>
-      ) : (
+        <><span color='red'>{language.toUpperCase()}</span><span> </span></>
+        ) : (
         <span></span>
       )}
     </>
