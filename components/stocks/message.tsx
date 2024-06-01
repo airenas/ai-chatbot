@@ -31,12 +31,14 @@ export function BotMessage({
   content,
   className,
   sessionId,
-  id
+  id,
+  language,
 }: {
   content: string | Streamer
   className?: string
   sessionId?: string
   id?: string
+  language?: string
 }) {
   const text = useStreamableText(content)
   const [isHovered, setIsHovered] = useState(false);
@@ -46,6 +48,12 @@ export function BotMessage({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { isReading, setReading, useVoice } = useAppContext();
   const url = process.env.NEXT_PUBLIC_BOT_URL || 'https://worker1.mywire.org'
+
+  function setIsHoveredInt(v: boolean): void {
+    if (language === 'lt') {
+      setIsHovered(v)
+    }
+  }
 
   function handleTTSClick(event: any): void {
     event.preventDefault()
@@ -91,7 +99,7 @@ export function BotMessage({
   }
 
   useEffect(() => {
-    if (!wasPlayed && !isReading && useVoice) {
+    if (!wasPlayed && !isReading && useVoice && lang === 'lt') {
       setWasPlayed(true);
       play();
     } else {
@@ -105,8 +113,8 @@ export function BotMessage({
 
   return (
     <div className={cn('group relative flex items-start md:-ml-12', className)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => setIsHoveredInt(true)}
+      onMouseLeave={() => setIsHoveredInt(false)}
     >
       <div className="flex size-[24px] shrink-0 select-none items-center justify-center rounded-md border bg-primary text-primary-foreground shadow-sm">
         <IconLTPolicija />

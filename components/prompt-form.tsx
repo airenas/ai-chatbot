@@ -35,7 +35,7 @@ export function PromptForm({
   const { submitUserMessage } = useActions()
   const [_, setMessages] = useUIState<typeof AI>()
   const ws = getWS()
-  const { useVoice, isRecording } = useAppContext()
+  const { useVoice, isRecording, setLanguage } = useAppContext()
 
   React.useEffect(() => {
     if (inputRef.current) {
@@ -60,7 +60,8 @@ export function PromptForm({
       }
       if (message.type === 'TEXT' && message.who === 'BOT') {
         const streamable = new Streamer(message.data);
-        msg = <BotMessage content={streamable} sessionId={message.session_id} id={message.id} />
+        msg = <BotMessage content={streamable} sessionId={message.session_id} id={message.id} lang={message.lang} />
+        setLanguage(message.lang)
       }
       if (msg !== null) {
         setMessages((currentMessages: any | { id: any }[]) => {
@@ -89,7 +90,7 @@ export function PromptForm({
         })
       }
     })
-  }, [setInput, input, setMessages, ws])
+  }, [setInput, input, setMessages, ws, setLanguage])
 
   return (
     <form

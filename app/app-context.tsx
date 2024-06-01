@@ -9,6 +9,8 @@ const AppContext = createContext({
     setRecording: (v: boolean) => { },
     isReading: false,
     setReading: (v: boolean) => { },
+    language: "lt",
+    setLanguage: (v: string) => { },
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -26,6 +28,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [isRecording, setRecording] = useState(false)
     const [isReading, setReading] = useState(false)
+    const [language, setLanguage] = useState("lt")
 
     return (
         <AppContext.Provider
@@ -36,6 +39,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
                 setRecording,
                 isReading,
                 setReading,
+                language,
+                setLanguage
             }}
         >
             {children}

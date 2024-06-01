@@ -11,6 +11,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { useRouter } from 'next/navigation'
+import { LanguageDisplay } from './lang-display'
 import { VoiceToggle } from './voice-toggle'
 
 
@@ -39,6 +40,7 @@ export function Header() {
         </React.Suspense>
       </div>
       <div>
+        <LanguageDisplay />
         <VoiceToggle />
         <ThemeToggle />
       </div>
