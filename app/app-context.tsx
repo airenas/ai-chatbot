@@ -1,5 +1,6 @@
 'use client'
 
+import { dropWS } from '@/lib/websocket';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const AppContext = createContext({
@@ -11,6 +12,7 @@ const AppContext = createContext({
     setReading: (v: boolean) => { },
     language: "lt",
     setLanguage: (v: string) => { },
+    cleanContext: () => { },
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -30,6 +32,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const [isReading, setReading] = useState(false)
     const [language, setLanguage] = useState("lt")
 
+    const cleanContext = (() => {
+        setLanguage("lt")
+        dropWS()
+    });
+
     return (
         <AppContext.Provider
             value={{
@@ -40,7 +47,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
                 isReading,
                 setReading,
                 language,
-                setLanguage
+                setLanguage,
+                cleanContext
             }}
         >
             {children}

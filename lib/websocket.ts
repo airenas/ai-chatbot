@@ -103,3 +103,12 @@ export function getWS(): WebSocketWrapper {
     }
     return ws
 }
+
+export function dropWS() {
+    const url = process.env.NEXT_PUBLIC_WS_URL || 'wss://worker1.mywire.org' // does not work env setting!
+    if (ws !== null) {
+        ws.close()
+        ws = null
+    }
+    return ws
+}

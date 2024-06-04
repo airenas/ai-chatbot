@@ -14,9 +14,12 @@ import { useRouter } from 'next/navigation'
 import { LanguageDisplay } from './lang-display'
 import { VoiceToggle } from './voice-toggle'
 import { AudioDisplay } from './audio-display'
+import { useAppContext } from '@/app/app-context'
 
 
 export function Header() {
+  const { cleanContext } = useAppContext();
+
   const router = useRouter()
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between w-full h-16 px-4 border-b shrink-0 bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl">
@@ -27,6 +30,7 @@ export function Header() {
             size="icon"
             className="absolute left-0 top-[14px] size-8 rounded-full bg-background p-0 sm:left-4"
             onClick={() => {
+              cleanContext()
               router.push('/new')
             }}
           >
