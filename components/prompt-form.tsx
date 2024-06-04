@@ -7,7 +7,6 @@ import { useActions, useUIState } from 'ai/rsc'
 
 import { useAppContext } from '@/app/app-context'
 import { Button } from '@/components/ui/button'
-import { IconArrowElbow } from '@/components/ui/icons'
 import {
   Tooltip,
   TooltipContent,
@@ -19,6 +18,7 @@ import { Streamer } from '@/lib/stream-value'
 import { getWS } from '@/lib/websocket'
 import { nanoid } from 'ai'
 import { useRouter } from 'next/navigation'
+import { PiPaperPlaneTiltBold } from 'react-icons/pi'
 import AudioRecorder from './audio-recorder'
 import { BotMessage, SpinnerMessage, UserMessage } from './stocks/message'
 
@@ -146,7 +146,7 @@ export function PromptForm({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button type="submit" size="icon" disabled={input === ''}>
-                  <IconArrowElbow />
+                  <PiPaperPlaneTiltBold />
                   <span className="sr-only">Siųsti žinutę</span>
                 </Button>
               </TooltipTrigger>

@@ -261,20 +261,6 @@ function IconRefresh({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
-function IconStop({ className, ...props }: React.ComponentProps<'svg'>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 256 256"
-      fill="currentColor"
-      className={cn('size-4', className)}
-      {...props}
-    >
-      <path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24Zm0 192a88 88 0 1 1 88-88 88.1 88.1 0 0 1-88 88Zm24-120h-48a8 8 0 0 0-8 8v48a8 8 0 0 0 8 8h48a8 8 0 0 0 8-8v-48a8 8 0 0 0-8-8Zm-8 48h-32v-32h32Z" />
-    </svg>
-  )
-}
-
 function IconSidebar({ className, ...props }: React.ComponentProps<'svg'>) {
   return (
     <svg
@@ -393,19 +379,6 @@ function IconEdit({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
-function IconShare({ className, ...props }: React.ComponentProps<'svg'>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="currentColor"
-      className={cn('size-4', className)}
-      viewBox="0 0 256 256"
-      {...props}
-    >
-      <path d="m237.66 106.35-80-80A8 8 0 0 0 144 32v40.35c-25.94 2.22-54.59 14.92-78.16 34.91-28.38 24.08-46.05 55.11-49.76 87.37a12 12 0 0 0 20.68 9.58c11-11.71 50.14-48.74 107.24-52V192a8 8 0 0 0 13.66 5.65l80-80a8 8 0 0 0 0-11.3ZM160 172.69V144a8 8 0 0 0-8-8c-28.08 0-55.43 7.33-81.29 21.8a196.17 196.17 0 0 0-36.57 26.52c5.8-23.84 20.42-46.51 42.05-64.86C99.41 99.77 127.75 88 152 88a8 8 0 0 0 8-8V51.32L220.69 112Z" />
-    </svg>
-  )
-}
 
 function IconUsers({ className, ...props }: React.ComponentProps<'svg'>) {
   return (
@@ -457,6 +430,6 @@ function IconChevronUpDown({
 
 export {
   IconArrowDown, IconArrowElbow, IconArrowRight, IconCheck, IconChevronUpDown, IconClose, IconCopy, IconDownload, IconEdit, IconExternalLink, IconMessage, IconMoon, IconNextChat,
-  IconOpenAI, IconPlus, IconRefresh, IconSeparator, IconShare, IconSidebar, IconSpinner, IconStop, IconSun, IconTrash, IconUser, IconUsers, IconLTPolicija
+  IconOpenAI, IconPlus, IconRefresh, IconSeparator, IconSidebar, IconSpinner, IconSun, IconTrash, IconUser, IconUsers, IconLTPolicija
 };
 

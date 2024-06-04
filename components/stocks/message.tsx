@@ -1,11 +1,12 @@
 'use client'
 
 import { useAppContext } from '@/app/app-context'
-import { IconLTPolicija, IconShare, IconSpinner, IconStop, IconUser } from '@/components/ui/icons'
+import { IconLTPolicija, IconSpinner, IconUser } from '@/components/ui/icons'
 import { useStreamableText } from '@/lib/hooks/use-streamable-text'
 import { Streamer } from '@/lib/stream-value'
 import { cn } from '@/lib/utils'
 import { useEffect, useRef, useState } from 'react'
+import { PiPlayCircleBold, PiStopCircleBold } from "react-icons/pi"
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import { MemoizedReactMarkdown } from '../markdown'
@@ -164,10 +165,11 @@ export function BotMessage({
       </div>
       {(isHovered || isPlaying) && (
         <div
-          className="absolute bottom-0 left-4 mb-2 ml-2"
+          className="absolute bottom-0 left-0 mb-0 ml-1"
           onClick={handleTTSClick}
         >
-          {isPlaying ? (isLoading ? <IconSpinner /> : <IconStop />) : <IconShare />}
+          {isPlaying ? (isLoading ? <IconSpinner className="size-5" /> : <PiStopCircleBold size={20} />) :
+            <PiPlayCircleBold size={20} style={{ opacity: isReading ? 0.5 : 1 }} />}
         </div>
       )}
     </div>

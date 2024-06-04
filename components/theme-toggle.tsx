@@ -1,10 +1,10 @@
 'use client'
 
-import * as React from 'react'
 import { useTheme } from 'next-themes'
+import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
-import { IconMoon, IconSun } from '@/components/ui/icons'
+import { PiMoonBold, PiSunBold } from 'react-icons/pi'
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme()
@@ -21,9 +21,9 @@ export function ThemeToggle() {
       }}
     >
       {!theme ? null : theme === 'dark' ? (
-        <IconMoon className="transition-all" />
+        <PiMoonBold className="transition-all" />
       ) : (
-        <IconSun className="transition-all" />
+        <PiSunBold className="transition-all" />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>

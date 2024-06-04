@@ -13,6 +13,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { LanguageDisplay } from './lang-display'
 import { VoiceToggle } from './voice-toggle'
+import { AudioDisplay } from './audio-display'
 
 
 export function Header() {
@@ -40,6 +41,7 @@ export function Header() {
         </React.Suspense>
       </div>
       <div>
+        <AudioDisplay />
         <LanguageDisplay />
         <VoiceToggle />
         <ThemeToggle />

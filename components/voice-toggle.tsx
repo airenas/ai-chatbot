@@ -3,22 +3,13 @@
 
 import { useAppContext } from '@/app/app-context'
 import { Button } from '@/components/ui/button'
+import { PiMicrophoneStageBold, PiTextTBold } from 'react-icons/pi'
 
 export function VoiceToggle() {
-  const { useVoice, toggleVoice, isRecording, isReading } = useAppContext()
+  const { useVoice, toggleVoice } = useAppContext()
 
   return (
     <>
-      {isReading ? (
-        <span color='red'>Speaking { }</span>
-      ) : (
-        <span></span>
-      )}
-      {isRecording ? (
-        <span color='red'>Recording { }</span>
-      ) : (
-        <span></span>
-      )}
       <Button
         variant="ghost"
         size="icon"
@@ -27,13 +18,11 @@ export function VoiceToggle() {
         }}
       >
         {useVoice ? (
-          <span>Voice</span>
-          // <IconVoice className="transition-all" />
+          <PiMicrophoneStageBold className="transition-all" />
         ) : (
-          <span>Text</span>
-          // <IconText className="transition-all" />
+          <PiTextTBold className="transition-all" />
         )}
-        <span className="sr-only">Toggle voice</span>
+        <span className="sr-only">Perjungti audio režimą</span>
       </Button>
     </>
 

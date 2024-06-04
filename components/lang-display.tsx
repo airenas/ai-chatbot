@@ -1,8 +1,9 @@
 'use client'
 
 
-import { useAppContext } from '@/app/app-context'
+import { useAppContext } from '@/app/app-context';
 import Flag from 'react-world-flags';
+import { Button } from './ui/button';
 
 export function LanguageDisplay() {
   const { language } = useAppContext()
@@ -22,9 +23,18 @@ export function LanguageDisplay() {
   return (
     <>
       {language !== 'lt' ? (
-        <><Flag code={getFlagCode(language)} style={{ width: '25px' }} /></>
-        ) : (
-        <span></span>
+        <>
+          <Button
+            variant="ghost"
+            size="icon" 
+            disabled={true}
+            >
+            <Flag code={getFlagCode(language)} style={{ width: '25px' }} />
+          </Button>
+
+        </>
+      ) : (
+        <></>
       )}
     </>
 
