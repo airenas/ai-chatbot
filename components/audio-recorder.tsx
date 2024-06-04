@@ -180,7 +180,7 @@ const AudioRecorder: React.FC = () => {
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
                 onTouchCancel={handleTouchEnd}  // To handle the case when the touch is canceled
-                style={{ position: 'relative', overflow: 'hidden', padding: 0, width: 128 }}
+                style={{ position: 'relative', overflow: 'hidden', padding: 0, width: 80}}
                 disabled={isReading}
             >
                 <canvas ref={canvasRef} className={!isRecording ? 'hidden' : ''}
