@@ -58,30 +58,39 @@ export function BotMessage({
 
   function handleTTSClick(event: any): void {
     event.preventDefault()
-    console.log('TTS clicked')
+    console.debug('TTS clicked')
     event.preventDefault();
     if (isPlaying) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-      setIsPlaying(false);
-      setIsLoading(false);
-      setReading(false);
+      stop();
     } else {
       play();
     }
   }
 
+  function stop(): void {
+    console.debug('stop audio')
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setIsPlaying(false);
+    setIsLoading(false);
+    setReading(false);
+  }
+
   function play(): void {
+    console.debug('call play')
     if (!isPlaying && !isReading) {
       setIsLoading(true);
       if (audioRef.current) {
-        console.log('stop audio')
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+        try {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        } catch (error: any) {
+          console.warn('stop audio', error)
+        }
       } else {
-        console.log('new audio')
+        console.debug('new audio')
       }
       const audio = new Audio(`${url}/ai-demo-service/tts/${sessionId}/${id}`);
       audioRef.current = audio;
@@ -93,13 +102,19 @@ export function BotMessage({
         setIsPlaying(false);
         setReading(false);
       }
-      audio.play();
+      audio.onerror = (err) => {
+        console.warn('error audio', err)
+      }
+      console.debug('call play')
+      audio.play().catch((e)=>{
+        console.warn('error playing audio', e)     });
       setIsPlaying(true);
       setReading(true);
     }
   }
 
   useEffect(() => {
+    console.debug('useEffect bot message')
     if (!wasPlayed && !isReading && useVoice && language === 'lt') {
       setWasPlayed(true);
       play();
@@ -108,7 +123,15 @@ export function BotMessage({
     }
 
     return () => {
-      // console.log('Component will be unmounted');
+      try {
+        stop();
+      } catch (error: any) {
+        if (error.name === 'AbortError') {
+          console.log('Audio playback stopped');
+        } else {
+          console.error('Error stopping audio playback:', error);
+        }
+      }
     };
   }, []);
 
