@@ -82,10 +82,9 @@ const AudioRecorder: React.FC = () => {
                 }
                 source.connect(analyser);
 
-                // const baseUrl = new URL('.', import.meta.url).toString();
-                const baseUrl = '/ai-chatbot/';
+                const baseUrl = process.env.NEXT_PUBLIC_BASE_PATH;
                 console.log('baseUrl:', baseUrl);
-                await audioContext.audioWorklet.addModule(`${baseUrl}audio-processor.js`);
+                await audioContext.audioWorklet.addModule(`${baseUrl}/audio-processor.js`);
                 const workletNode = new AudioWorkletNode(audioContext, 'recorder-audio-processor', {
                     processorOptions: {
                         sampleRate: audioContext.sampleRate,
