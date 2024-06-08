@@ -82,7 +82,7 @@ const AudioRecorder: React.FC = () => {
                 }
                 source.connect(analyser);
 
-                const baseUrl = process.env.NEXT_PUBLIC_BASE_PATH;
+                const baseUrl = process.env.NEXT_PUBLIC_BASE_PATH || '/__PATH_PREFIX__';
                 console.log('baseUrl:', baseUrl);
                 await audioContext.audioWorklet.addModule(`${baseUrl}/audio-processor.js`);
                 const workletNode = new AudioWorkletNode(audioContext, 'recorder-audio-processor', {
