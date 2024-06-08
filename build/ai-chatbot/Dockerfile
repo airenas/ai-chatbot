@@ -43,6 +43,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+COPY --chown=nextjs:nodejs build/ai-chatbot/entrypoint.sh ./
+
+RUN chown nextjs:nodejs /app
 
 USER nextjs
 
@@ -50,4 +53,4 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD HOSTNAME=0.0.0.0 node server.js
+CMD ./entrypoint.sh

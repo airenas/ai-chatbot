@@ -12,5 +12,5 @@ module.exports = {
       }
     ]
   },
-  basePath: '/ai-chatbot',
+  basePath: '/__PATH_PREFIX__',
 }

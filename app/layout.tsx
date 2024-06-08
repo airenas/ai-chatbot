@@ -11,9 +11,6 @@ import VersionLogger from './version-logger'
 import { AppProvider } from './app-context'
 
 export const metadata = {
-  metadataBase: process.env.VERCEL_URL
-    ? new URL(`https://${process.env.VERCEL_URL}`)
-    : undefined,
   title: {
     default: 'DiPOLIS',
     template: `%s`
@@ -40,6 +37,9 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <base href={process.env.NEXT_PUBLIC_BASE_PATH || '/'} />
+      </head>
       <body
         className={cn(
           'font-sans antialiased',
