@@ -40,7 +40,11 @@ const AudioRecorder: React.FC = () => {
 
     const startRecording = async () => {
         rec_id = nanoid();
-        console.log(`start ${rec_id}`);
+        console.log(`start recording ${rec_id}`);
+        if (streamRef.current) {
+            console.warn('Already recording!!!!!');
+            stopRecording();
+        }
         try {
             if (!audioContextRef.current) {
                 audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -68,6 +72,7 @@ const AudioRecorder: React.FC = () => {
             if (!canvasCtx) return;
 
             if (audioContext && stream) {
+                console.debug(`create source`);
                 const source = audioContext.createMediaStreamSource(stream);
                 sourceRef.current = source;
 
@@ -124,6 +129,7 @@ const AudioRecorder: React.FC = () => {
     };
 
     const stopRecording = () => {
+        console.debug(`stop ${rec_id}`);
         if (animationIdRef.current) {
             cancelAnimationFrame(animationIdRef.current);
         }
@@ -142,6 +148,7 @@ const AudioRecorder: React.FC = () => {
 
     const stopStream = () => {
         if (streamRef.current) {
+            console.debug(`drop stream`);
             streamRef.current.getTracks().forEach(track => track.stop())
             streamRef.current = null
         }
