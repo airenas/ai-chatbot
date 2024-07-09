@@ -48,7 +48,7 @@ export function BotMessage({
   const [wasPlayed, setWasPlayed] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { isReading, setReading, useVoice } = useAppContext();
-  const url = process.env.NEXT_PUBLIC_BOT_URL || 'https://worker1.mywire.org'
+  const url = process.env.NEXT_PUBLIC_BOT_URL || '__BOT_URL__'
 
   function setIsHoveredInt(v: boolean): void {
     if (language === 'lt') {

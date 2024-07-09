@@ -97,7 +97,7 @@ class WebSocketWrapper {
 let ws: WebSocketWrapper | null = null;
 
 export function getWS(): WebSocketWrapper {
-    const url = process.env.NEXT_PUBLIC_WS_URL || 'wss://worker1.mywire.org' // does not work env setting!
+    const url = process.env.NEXT_PUBLIC_WS_URL || '__WS_URL__' // does not work env setting!
     if (ws === null) {
         ws = new WebSocketWrapper(url)
     }
@@ -105,7 +105,6 @@ export function getWS(): WebSocketWrapper {
 }
 
 export function dropWS() {
-    const url = process.env.NEXT_PUBLIC_WS_URL || 'wss://worker1.mywire.org' // does not work env setting!
     if (ws !== null) {
         ws.close()
         ws = null
