@@ -8,14 +8,14 @@ echo "Set base path to $BASE_PATH done"
 
 echo "Set WS_URL to $WS_URL"
 sed -i "s|^NEXT_PUBLIC_WS_URL=.*|NEXT_PUBLIC_WS_URL=$WS_URL|" .env
-sed -i "s|/__WS_URL__|$WS_URL|g" server.js
-find .next -type f -exec sed -i "s|/__WS_URL__|$WS_URL|g" {} +
+sed -i "s|__WS_URL__|$WS_URL|g" server.js
+find .next -type f -exec sed -i "s|__WS_URL__|$WS_URL|g" {} +
 echo "Set ws url to $WS_URL done"
 
 echo "Set BOT_URL to $BOT_URL"
 sed -i "s|^NEXT_PUBLIC_BOT_URL=.*|NEXT_PUBLIC_BOT_URL=$BOT_URL|" .env
-sed -i "s|/__BOT_URL__|$BOT_URL|g" server.js
-find .next -type f -exec sed -i "s|/__BOT_URL__|$BOT_URL|g" {} +
+sed -i "s|__BOT_URL__|$BOT_URL|g" server.js
+find .next -type f -exec sed -i "s|__BOT_URL__|$BOT_URL|g" {} +
 echo "Set bot url to $BOT_URL done"
 
 echo "Starting node service"
