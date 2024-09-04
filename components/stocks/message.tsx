@@ -4,11 +4,12 @@ import { useAppContext } from '@/app/app-context'
 import { IconLTPolicija, IconSpinner, IconUser } from '@/components/ui/icons'
 import { useStreamableText } from '@/lib/hooks/use-streamable-text'
 import { Streamer } from '@/lib/stream-value'
-import { cn } from '@/lib/utils'
+import { cn, errorAsStr } from '@/lib/utils'
 import { useEffect, useRef, useState } from 'react'
 import { PiPlayCircleBold, PiStopCircleBold } from "react-icons/pi"
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
+import { toast } from 'sonner'
 import { MemoizedReactMarkdown } from '../markdown'
 import { CodeBlock } from '../ui/codeblock'
 import { spinner } from './spinner'
@@ -104,10 +105,17 @@ export function BotMessage({
       }
       audio.onerror = (err) => {
         console.warn('error audio', err)
+        const errStr = errorAsStr(err);
+        toast.error(`Nepavyko perskaityti<br/><br/>${errStr}`);
+        stop();
       }
       console.debug('call play')
-      audio.play().catch((e)=>{
-        console.warn('error playing audio', e)     });
+      audio.play().catch((err) => {
+        console.warn('error playing audio', err)
+        const errStr = errorAsStr(err);
+        toast.error(`Nepavyko perskaityti<br/><br/>${errStr}`);
+        stop();
+      });
       setIsPlaying(true);
       setReading(true);
     }

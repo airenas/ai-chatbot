@@ -1,9 +1,11 @@
 import { useAppContext } from '@/app/app-context';
 import AudioResampler from '@/lib/audio-resampler';
+import { errorAsStr } from '@/lib/utils';
 import { getWS } from '@/lib/websocket';
 import { nanoid } from 'ai';
 import { useTheme } from 'next-themes';
 import React, { useRef } from 'react';
+import { toast } from 'sonner';
 import { Button } from './ui/button';
 
 const AudioRecorder: React.FC = () => {
@@ -66,10 +68,16 @@ const AudioRecorder: React.FC = () => {
                 streamRef.current = await navigator.mediaDevices.getUserMedia(constraints);
             }
             const stream = streamRef.current;
-            if (!canvasRef.current) return;
+            if (!canvasRef.current) {
+                throw new Error('Canvas not found');
+            }
+
+
             const canvas = canvasRef.current;
             const canvasCtx = canvas.getContext('2d');
-            if (!canvasCtx) return;
+            if (!canvasCtx) {
+                throw new Error('Canvas context not found');
+            }
 
             if (audioContext && stream) {
                 console.debug(`create source`);
@@ -121,7 +129,9 @@ const AudioRecorder: React.FC = () => {
                 setRecording(true);
                 draw(canvasCtx, canvas);
             }
-        } catch (error) {
+        } catch (error: any) {
+            const errStr = errorAsStr(error);
+            toast.error(`Nepavyko pradėti įrašinėti<br/><br/>${errStr}`);
             console.error(error);
             ws.sendAudioEvent(rec_id, false);
             stopRecording()
@@ -186,7 +196,7 @@ const AudioRecorder: React.FC = () => {
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
                 onTouchCancel={handleTouchEnd}  // To handle the case when the touch is canceled
-                style={{ position: 'relative', overflow: 'hidden', padding: 0, width: 80}}
+                style={{ position: 'relative', overflow: 'hidden', padding: 0, width: 80 }}
                 disabled={isReading}
             >
                 <canvas ref={canvasRef} className={!isRecording ? 'hidden' : ''}

@@ -42,6 +42,23 @@ export function formatDate(input: string | number | Date): string {
   })
 }
 
+export function errorAsStr(err: any): string {
+  if (err instanceof DOMException) {
+    if (err.message.includes("The request is not allowed by the user agent or the platform in the current context") || err.message.includes("Permission denied")) {
+      return 'Naršyklė neleidžia atlikti numatytą veiksmą. Patikrinkite ar nėra užblokavimo pranešimų.';
+    } else {
+      return 'DOM KLaida: ' + err.message;
+    }
+  }
+  if (err instanceof Error) {
+    return err.message
+  } else if (typeof err === 'string') {
+    return err
+  } else {
+    return 'Įvyko nenumatyta klaida'
+  }
+}
+
 export const formatNumber = (value: number) =>
   new Intl.NumberFormat('en-US', {
     style: 'currency',
