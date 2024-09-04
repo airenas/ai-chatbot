@@ -131,7 +131,7 @@ const AudioRecorder: React.FC = () => {
             }
         } catch (error: any) {
             const errStr = errorAsStr(error);
-            toast.error(`Nepavyko pradėti įrašinėti<br/><br/>${errStr}`);
+            toast.error(`Nepavyko pradėti įrašinėti\n\n${errStr}`);
             console.error(error);
             ws.sendAudioEvent(rec_id, false);
             stopRecording()

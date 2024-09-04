@@ -106,14 +106,14 @@ export function BotMessage({
       audio.onerror = (err) => {
         console.warn('error audio', err)
         const errStr = errorAsStr(err);
-        toast.error(`Nepavyko perskaityti<br/><br/>${errStr}`);
+        toast.error(`Nepavyko perskaityti\n\n${errStr}`);
         stop();
       }
       console.debug('call play')
       audio.play().catch((err) => {
         console.warn('error playing audio', err)
         const errStr = errorAsStr(err);
-        toast.error(`Nepavyko perskaityti<br/><br/>${errStr}`);
+        toast.error(`Nepavyko perskaityti\n\n${errStr}`);
         stop();
       });
       setIsPlaying(true);
